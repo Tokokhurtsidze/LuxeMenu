@@ -25,16 +25,17 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
   const [items,      setItems]      = useState<MenuItem[]>(initItems)
 
   const NAV: { id: Section; label: string; icon: React.ElementType; count?: number }[] = [
-    { id: 'items',    label: 'Menu Items',  icon: LayoutGrid, count: items.length },
-    { id: 'categories', label: 'Categories', icon: Tag,       count: categories.length },
-    { id: 'qr',       label: 'QR Codes',    icon: QrCode },
-    { id: 'branding', label: 'Branding',    icon: Settings },
+    { id: 'items',      label: 'Menu Items',  icon: LayoutGrid, count: items.length },
+    { id: 'categories', label: 'Categories',  icon: Tag,        count: categories.length },
+    { id: 'qr',         label: 'QR Codes',    icon: QrCode },
+    { id: 'branding',   label: 'Branding',    icon: Settings },
   ]
 
   return (
-    <div className="flex min-h-[calc(100vh-57px)] -m-6 sm:-m-10">
-      {/* ── Sidebar ── */}
-      <aside className="w-56 flex-shrink-0 glass-dark border-r border-white/8 flex flex-col py-6 px-3 gap-1">
+    <div className="flex flex-col md:flex-row min-h-[calc(100vh-57px)] -m-6 sm:-m-10">
+
+      {/* ── Sidebar — desktop only ── */}
+      <aside className="hidden md:flex w-56 flex-shrink-0 glass-dark border-r border-white/8 flex-col py-6 px-3 gap-1">
         {NAV.map(nav => {
           const Icon = nav.icon
           const active = section === nav.id
@@ -62,9 +63,7 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
 
         <div className="mt-auto pt-4 border-t border-white/5 space-y-2">
           {typeof restaurant.scan_count === 'number' && (
-            <p className="px-3 text-[11px] text-white/20">
-              📊 {restaurant.scan_count} scans
-            </p>
+            <p className="px-3 text-[11px] text-white/20">📊 {restaurant.scan_count} scans</p>
           )}
           <Link
             href={`/menu/${restaurant.slug}`}
@@ -77,11 +76,48 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
         </div>
       </aside>
 
+      {/* ── Mobile top tab bar ── */}
+      <div className="md:hidden flex overflow-x-auto scrollbar-none glass-dark border-b border-white/8 px-2 py-2 gap-1 flex-shrink-0">
+        {NAV.map(nav => {
+          const Icon = nav.icon
+          const active = section === nav.id
+          return (
+            <button
+              key={nav.id}
+              onClick={() => setSection(nav.id)}
+              className={cn(
+                'flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2 rounded-xl text-[10px] font-semibold transition-all',
+                active
+                  ? 'bg-gold/10 border border-gold/25 text-gold'
+                  : 'text-white/40 hover:text-white/70'
+              )}
+            >
+              <Icon size={16} />
+              <span className="whitespace-nowrap">{nav.label}</span>
+              {nav.count !== undefined && (
+                <span className={cn('text-[9px]', active ? 'text-gold/60' : 'text-white/20')}>
+                  {nav.count}
+                </span>
+              )}
+            </button>
+          )
+        })}
+        <Link
+          href={`/menu/${restaurant.slug}`}
+          target="_blank"
+          className="flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2 rounded-xl text-[10px] font-semibold border border-gold/30 text-gold bg-gold/5 ml-auto"
+        >
+          <ExternalLink size={16} />
+          <span>Live Menu</span>
+        </Link>
+      </div>
+
       {/* ── Content ── */}
-      <div className="flex-1 overflow-auto p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
+        {/* Breadcrumb — desktop only */}
+        <div className="hidden md:flex items-center justify-between mb-6">
           <div className="flex items-center gap-2 text-xs text-white/30">
-            <span className="text-white/50 font-medium">{restaurant.name}</span>
+            <span className="text-white/50 font-medium truncate max-w-[120px]">{restaurant.name}</span>
             <ChevronRight size={12} />
             <span className="text-gold">{NAV.find(n => n.id === section)?.label}</span>
           </div>
@@ -95,6 +131,9 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
           </Link>
         </div>
 
+        {/* Mobile restaurant name */}
+        <p className="md:hidden text-sm font-semibold text-white/60 mb-4 truncate">{restaurant.name}</p>
+
         {section === 'items' && (
           <ItemsManager
             restaurantSlug={restaurant.slug}
@@ -103,7 +142,6 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
             onUpdate={setItems}
           />
         )}
-
         {section === 'categories' && (
           <CategoriesPanel
             restaurantSlug={restaurant.slug}
@@ -111,14 +149,12 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
             onUpdate={setCategories}
           />
         )}
-
         {section === 'qr' && (
           <QrGenerator
             restaurantSlug={restaurant.slug}
             restaurantName={restaurant.name}
           />
         )}
-
         {section === 'branding' && (
           <BrandingPanel
             restaurant={restaurant}

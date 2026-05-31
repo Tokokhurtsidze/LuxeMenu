@@ -83,13 +83,13 @@ export default function LandingClient() {
   return (
     <>
       {/* ── Fixed navbar ── */}
-      <nav className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-5 py-3 glass-dark border-b" style={{ borderColor: 'var(--pg-border)' }}>
-        <span className="font-display text-lg font-bold" style={{ color: 'var(--gold)' }}>AuraMenu</span>
-        <div className="flex items-center gap-3">
+      <nav className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-4 sm:px-6 py-2.5 glass-dark border-b" style={{ borderColor: 'var(--pg-border)' }}>
+        <span className="font-display text-base sm:text-lg font-bold flex-shrink-0" style={{ color: 'var(--gold)' }}>AuraMenu</span>
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <WebLanguageSwitcher />
           <Link
             href="/auth/login"
-            className="px-4 py-1.5 rounded-full text-sm font-bold border transition-all hover:shadow-gold-glow"
+            className="flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-all hover:shadow-gold-glow whitespace-nowrap"
             style={{ borderColor: 'var(--gold)', color: 'var(--gold)', background: 'transparent' }}
           >
             {t.signInBtn}
