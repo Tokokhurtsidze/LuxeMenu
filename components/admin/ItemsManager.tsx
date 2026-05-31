@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, Star } from 'lucide-react'
 import Image from 'next/image'
 import { cn, formatPrice } from '@/lib/utils'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 import type { MenuItem, Category } from '@/types'
 import ItemFormModal from './ItemFormModal'
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function ItemsManager({ restaurantSlug, items, categories, onUpdate }: Props) {
+  const { t } = useWebLocale()
   const [editingItem,     setEditingItem]     = useState<MenuItem | null>(null)
   const [isAdding,        setIsAdding]        = useState(false)
   const [filterCategory,  setFilterCategory]  = useState<string>('all')
@@ -76,15 +78,15 @@ export default function ItemsManager({ restaurantSlug, items, categories, onUpda
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="font-display text-2xl font-bold text-white">Menu Items</h2>
-          <p className="text-xs text-white/30 mt-0.5">{items.length} total items</p>
+          <h2 className="font-display text-2xl font-bold text-white">{t.aMenuItems}</h2>
+          <p className="text-xs text-white/30 mt-0.5">{items.length} {t.aTotalItems}</p>
         </div>
         <button
           onClick={() => setIsAdding(true)}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold text-black text-sm font-bold hover:shadow-gold-glow transition-shadow"
         >
           <Plus size={15} />
-          Add Item
+          {t.aAddItem}
         </button>
       </div>
 
@@ -94,7 +96,7 @@ export default function ItemsManager({ restaurantSlug, items, categories, onUpda
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search items by name..."
+          placeholder={t.aSearch}
           className="w-full bg-obsidian-100 border border-white/10 text-white text-sm rounded-xl px-4 py-2.5 pl-9 placeholder:text-white/20 focus:outline-none focus:border-gold/50 transition-colors"
         />
         <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -109,7 +111,7 @@ export default function ItemsManager({ restaurantSlug, items, categories, onUpda
 
       {/* Category filter tabs */}
       <div className="flex gap-2 overflow-x-auto scrollbar-none mb-5 pb-1">
-        {[{ slug: 'all', name: 'All', icon: '' }, ...categories.sort((a,b) => a.sort_order - b.sort_order)].map(cat => (
+        {[{ slug: 'all', name: t.aAll, icon: '' }, ...categories.sort((a,b) => a.sort_order - b.sort_order)].map(cat => (
           <button
             key={cat.slug}
             onClick={() => setFilterCategory(cat.slug)}

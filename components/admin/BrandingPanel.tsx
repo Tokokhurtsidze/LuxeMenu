@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Loader2, Check } from 'lucide-react'
 import type { Restaurant, ThemeConfig } from '@/types'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 
 // ── Curated luxury fonts ──────────────────────────────────────────────────────
 const DISPLAY_FONTS = [
@@ -45,6 +46,7 @@ interface Props {
 }
 
 export default function BrandingPanel({ restaurant, onUpdate }: Props) {
+  const { t } = useWebLocale()
   const tc = restaurant.theme_config
 
   const [name,        setName]        = useState(restaurant.name)
@@ -119,11 +121,11 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
     <div className="max-w-xl space-y-8">
 
       {/* ── Identity ─────────────────────────────────────────────── */}
-      <Section title="Identity">
-        <Field label="Restaurant Name">
+      <Section title={t.aIdentity}>
+        <Field label={t.aRestName}>
           <Input value={name} onChange={setName} placeholder="My Restaurant" />
         </Field>
-        <Field label="Tagline">
+        <Field label={t.aTagline}>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
@@ -132,7 +134,7 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
             className={inputCls + ' resize-none'}
           />
         </Field>
-        <Field label="Logo URL">
+        <Field label={t.aLogoUrl}>
           <div className="flex items-center gap-3">
             {logoUrl.startsWith('http') && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -148,8 +150,8 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
       </Section>
 
       {/* ── Typography ───────────────────────────────────────────── */}
-      <Section title="Typography">
-        <Field label="Display Font (restaurant name, headings, prices)">
+      <Section title={t.aTypography}>
+        <Field label={t.aDisplayFont}>
           <div className="grid grid-cols-2 gap-2">
             {DISPLAY_FONTS.map(f => (
               <button
@@ -174,33 +176,33 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
       </Section>
 
       {/* ── Colors ───────────────────────────────────────────────── */}
-      <Section title="Colors">
+      <Section title={t.aColors}>
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Accent Color">
+            <Field label={t.aAccentColor}>
               <ColorRow value={accent} onChange={setAccent} />
             </Field>
-            <Field label="Text on Accent Button">
+            <Field label={t.aAccentFg}>
               <ColorRow value={accentFg} onChange={setAccentFg} />
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Page Background">
+            <Field label={t.aPageBg}>
               <ColorRow value={background} onChange={setBackground} />
             </Field>
-            <Field label="Primary Text">
+            <Field label={t.aPrimaryText}>
               <ColorRow value={textColor} onChange={setTextColor} />
             </Field>
           </div>
-          <Field label="Secondary Text (descriptions, labels)">
+          <Field label={t.aSecondaryText}>
             <Input value={textMuted} onChange={setTextMuted} placeholder="rgba(255,255,255,0.50)" />
           </Field>
         </div>
       </Section>
 
       {/* ── Cards ────────────────────────────────────────────────── */}
-      <Section title="Menu Cards">
-        <Field label="Card Style (glass intensity)">
+      <Section title={t.aCardStyle}>
+        <Field label={t.aCardStyle}>
           <div className="grid grid-cols-4 gap-2">
             {CARD_PRESETS.map((p, i) => (
               <button key={i} type="button" onClick={() => setCardPreset(i)}
@@ -215,7 +217,7 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
           </div>
         </Field>
 
-        <Field label="Card Corner Radius">
+        <Field label={t.aCardRadius}>
           <div className="grid grid-cols-4 gap-2">
             {RADIUS_PRESETS.map((r, i) => (
               <button key={i} type="button" onClick={() => setRadiusPreset(i)}
@@ -232,8 +234,8 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
       </Section>
 
       {/* ── Navigation ───────────────────────────────────────────── */}
-      <Section title="Category Navigation">
-        <Field label="Tab Style">
+      <Section title={t.aNavigation}>
+        <Field label={t.aTabStyle}>
           <div className="flex gap-2">
             {NAV_STYLES.map(s => (
               <button key={s.value} type="button" onClick={() => setNavStyle(s.value)}
@@ -249,7 +251,7 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
       </Section>
 
       {/* ── Live Preview ─────────────────────────────────────────── */}
-      <Section title="Live Preview">
+      <Section title={t.aLivePreview}>
         <div className="rounded-2xl p-5 overflow-hidden" style={{ backgroundColor: background }}>
           {/* Mini header */}
           <div className="text-center mb-5">
@@ -325,7 +327,7 @@ export default function BrandingPanel({ restaurant, onUpdate }: Props) {
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gold text-black hover:shadow-gold-glow transition-shadow disabled:opacity-60 ml-auto"
         >
           {saving ? <Loader2 size={14} className="animate-spin" /> : saved ? <Check size={14} /> : null}
-          {saved ? 'Saved!' : 'Save Changes'}
+          {saved ? t.aSaved : t.aSave}
         </button>
       </div>
     </div>

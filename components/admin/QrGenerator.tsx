@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import QRCode from 'qrcode'
 import { Download, Copy, Check, QrCode, ExternalLink } from 'lucide-react'
 import type { Restaurant } from '@/types'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 
 interface Props {
   restaurantSlug: string
@@ -22,6 +23,7 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
   const [inputVal, setInputVal] = useState('')
 
   // Accent color from restaurant branding — fallback to gold
+  const { t } = useWebLocale()
   const accent = restaurant?.theme_config?.accent_color ?? '#D4AF37'
 
   useEffect(() => {
@@ -72,16 +74,16 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
       className="max-w-sm"
     >
       <div className="mb-8">
-        <h2 className="font-display text-2xl font-bold text-white">QR Code</h2>
+        <h2 className="font-display text-2xl font-bold text-white">{t.aQrCodes}</h2>
         <p className="text-xs text-white/30 mt-1">
-          Unique QR for <span className="text-white/60">{restaurantName}</span>
+          {t.aUniqueQr} <span className="text-white/60">{restaurantName}</span>
         </p>
       </div>
 
       {/* Domain config */}
       <div className="glass border border-white/8 rounded-2xl p-5 mb-5">
         <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/25 mb-3">
-          Site Domain
+          {t.aSiteDomain}
         </p>
 
         {editing ? (
@@ -98,13 +100,13 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
               onClick={saveDomain}
               className="px-3 py-2 rounded-lg bg-gold text-black text-xs font-bold"
             >
-              Save
+              {t.aSave}
             </button>
             <button
               onClick={() => { setInputVal(domain); setEditing(false) }}
               className="px-3 py-2 rounded-lg border border-white/10 text-white/40 text-xs"
             >
-              Cancel
+              {t.aCancel}
             </button>
           </div>
         ) : (
@@ -114,7 +116,7 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
               onClick={() => setEditing(true)}
               className="text-[11px] text-gold/60 hover:text-gold border border-gold/20 hover:border-gold/40 px-2 py-1 rounded-lg transition-all"
             >
-              Change
+              {t.aChange}
             </button>
           </div>
         )}
@@ -149,7 +151,7 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
               rel="noreferrer"
               className="flex items-center justify-center gap-1 mt-1 text-[11px] text-gold/50 hover:text-gold transition-colors"
             >
-              <ExternalLink size={11} /> Preview
+              <ExternalLink size={11} /> {t.aPreview}
             </a>
           </div>
         )}
@@ -163,7 +165,7 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
             style={{ background: `${accent}18`, border: `1px solid ${accent}40`, color: accent }}
           >
             <Download size={14} />
-            Download PNG
+            {t.aDownload}
           </motion.button>
 
           <motion.button
@@ -172,9 +174,9 @@ export default function QrGenerator({ restaurantSlug, restaurantName, restaurant
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 text-white/60 text-sm font-medium hover:text-white/80 hover:bg-white/[0.04] transition-colors"
           >
             {copied ? (
-              <><Check size={14} className="text-emerald-400" /><span className="text-emerald-400">Copied!</span></>
+              <><Check size={14} className="text-emerald-400" /><span className="text-emerald-400">{t.aCopied}</span></>
             ) : (
-              <><Copy size={14} />Copy Link</>
+              <><Copy size={14} />{t.aCopyLink}</>
             )}
           </motion.button>
         </div>

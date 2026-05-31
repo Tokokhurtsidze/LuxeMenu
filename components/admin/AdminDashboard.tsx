@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { LayoutGrid, Tag, ExternalLink, ChevronRight, QrCode, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 import type { Restaurant, Category, MenuItem } from '@/types'
 import ItemsManager from './ItemsManager'
 import CategoriesPanel from './CategoriesPanel'
@@ -19,16 +20,17 @@ interface Props {
 }
 
 export default function AdminDashboard({ restaurant: initRestaurant, categories: initCats, items: initItems }: Props) {
+  const { t } = useWebLocale()
   const [section,    setSection]    = useState<Section>('items')
   const [restaurant, setRestaurant] = useState<Restaurant>(initRestaurant)
   const [categories, setCategories] = useState<Category[]>(initCats)
   const [items,      setItems]      = useState<MenuItem[]>(initItems)
 
   const NAV: { id: Section; label: string; icon: React.ElementType; count?: number }[] = [
-    { id: 'items',      label: 'Menu Items',  icon: LayoutGrid, count: items.length },
-    { id: 'categories', label: 'Categories',  icon: Tag,        count: categories.length },
-    { id: 'qr',         label: 'QR Codes',    icon: QrCode },
-    { id: 'branding',   label: 'Branding',    icon: Settings },
+    { id: 'items',      label: t.aMenuItems,   icon: LayoutGrid, count: items.length },
+    { id: 'categories', label: t.aCategories, icon: Tag,        count: categories.length },
+    { id: 'qr',         label: t.aQrCodes,    icon: QrCode },
+    { id: 'branding',   label: t.aBranding,   icon: Settings },
   ]
 
   return (
@@ -63,7 +65,7 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
 
         <div className="mt-auto pt-4 border-t border-white/5 space-y-2">
           {typeof restaurant.scan_count === 'number' && (
-            <p className="px-3 text-[11px] text-white/20">📊 {restaurant.scan_count} scans</p>
+            <p className="px-3 text-[11px] text-white/20">📊 {restaurant.scan_count} {t.scans}</p>
           )}
           <Link
             href={`/menu/${restaurant.slug}`}
@@ -71,7 +73,7 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
             className="flex items-center justify-center gap-2 mx-2 px-3 py-2.5 rounded-xl text-xs font-bold border border-gold/30 text-gold bg-gold/5 hover:bg-gold/10 hover:shadow-gold-glow transition-all"
           >
             <ExternalLink size={13} />
-            View Live Menu
+            {t.aViewMenu}
           </Link>
         </div>
       </aside>
@@ -108,7 +110,7 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
           className="flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2 rounded-xl text-[10px] font-semibold border border-gold/30 text-gold bg-gold/5 ml-auto"
         >
           <ExternalLink size={16} />
-          <span>Live Menu</span>
+          <span>{t.aLiveMenu}</span>
         </Link>
       </div>
 
@@ -127,7 +129,7 @@ export default function AdminDashboard({ restaurant: initRestaurant, categories:
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-gold/30 text-gold hover:bg-gold/10 transition-all"
           >
             <ExternalLink size={12} />
-            Live Menu ↗
+            {t.aLiveMenu}
           </Link>
         </div>
 

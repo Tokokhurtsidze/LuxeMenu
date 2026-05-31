@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Trash2, Plus, Loader2, GripVertical } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -45,6 +46,7 @@ interface Props {
 }
 
 export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }: Props) {
+  const { t } = useWebLocale()
   const [name,    setName]    = useState('')
   const [nameKa,  setNameKa]  = useState('')
   const [adding,  setAdding]  = useState(false)
@@ -100,8 +102,8 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
   return (
     <div className="max-w-xl">
       <div className="mb-6">
-        <h2 className="font-display text-2xl font-bold text-white">Categories</h2>
-        <p className="text-xs text-white/30 mt-0.5">Manage menu sections</p>
+        <h2 className="font-display text-2xl font-bold text-white">{t.aCategories}</h2>
+        <p className="text-xs text-white/30 mt-0.5">{t.aManageSections}</p>
       </div>
 
       {/* ── Existing categories ──────────────────────────────────── */}
@@ -147,12 +149,12 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
 
       {/* ── Add category ─────────────────────────────────────────── */}
       <div className="glass rounded-2xl border border-white/8 p-5 space-y-5">
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/25">Add Category</p>
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/25">{t.aAddCategory}</p>
 
         {/* Quick presets */}
         {availablePresets.length > 0 && (
           <div>
-            <p className="text-xs text-white/30 mb-2">Quick add</p>
+            <p className="text-xs text-white/30 mb-2">{t.aQuickAdd}</p>
             <div className="flex flex-wrap gap-2">
               {availablePresets.map(p => (
                 <motion.button
@@ -177,14 +179,14 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
         {/* Divider */}
         <div className="flex items-center gap-3">
           <span className="flex-1 h-px" style={{ background: 'var(--pg-border)' }} />
-          <span className="text-[10px] text-white/20 font-medium">or custom</span>
+          <span className="text-[10px] text-white/20 font-medium">{t.aOrCustom}</span>
           <span className="flex-1 h-px" style={{ background: 'var(--pg-border)' }} />
         </div>
 
         {/* Custom name inputs */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">Name (EN) <span className="text-gold">*</span></label>
+            <label className="block text-xs text-white/40 mb-1.5">{t.aNameEn} <span className="text-gold">*</span></label>
             <input
               value={name}
               onChange={e => { setName(e.target.value); setError(null) }}
@@ -194,7 +196,7 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
             />
           </div>
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">Name (KA)</label>
+            <label className="block text-xs text-white/40 mb-1.5">{t.aNameKa}</label>
             <input
               value={nameKa}
               onChange={e => setNameKa(e.target.value)}
@@ -207,7 +209,7 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
 
         {name && (
           <p className="text-[11px] text-white/25">
-            Slug: <span className="font-mono text-white/40">{toSlug(name)}</span>
+            {t.aSlug + ':'} <span className="font-mono text-white/40">{toSlug(name)}</span>
           </p>
         )}
 
@@ -219,7 +221,7 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gold text-black text-sm font-bold hover:shadow-gold-glow transition-shadow disabled:opacity-50"
         >
           {adding ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
-          Add Category
+          {t.aAddCategory}
         </button>
       </div>
     </div>

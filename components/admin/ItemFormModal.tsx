@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Plus, Trash2, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { MenuItem, Category, AllergenTag, DietaryTag, PairedItem, PairingType } from '@/types'
+import { useWebLocale } from '@/contexts/WebLocaleContext'
 
 const ALLERGENS: AllergenTag[] = ['nuts', 'dairy', 'gluten', 'eggs', 'soy', 'seafood', 'sesame']
 const DIETARY: DietaryTag[] = ['vegan', 'vegetarian', 'gluten-free', 'dairy-free', 'halal', 'kosher']
@@ -39,6 +40,7 @@ interface Props {
 }
 
 export default function ItemFormModal({ open, item, categories, restaurantSlug, onClose, onSaved }: Props) {
+  const { t } = useWebLocale()
   const isNew = !item
   const [form, setForm] = useState(defaultForm(item))
   const [saving, setSaving] = useState(false)
@@ -129,7 +131,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/8 flex-shrink-0">
               <div>
                 <h2 className="font-display text-lg font-semibold text-white">
-                  {isNew ? 'Add Menu Item' : 'Edit Item'}
+                  {isNew ? t.aAddMenuItem : t.aEditItem}
                 </h2>
                 {!isNew && <p className="text-xs text-white/30 mt-0.5">{item!.name}</p>}
               </div>
@@ -146,16 +148,16 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
               <div className="px-6 py-5 space-y-6">
 
                 {/* ── Basic Info ── */}
-                <Section title="Basic Info">
+                <Section title={t.aBasicInfo}>
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label="Name (EN)" required>
+                    <Field label={t.aNameEn} required>
                       <Input
                         value={form.name ?? ''}
                         onChange={v => set('name', v)}
                         placeholder="e.g. Truffle Risotto"
                       />
                     </Field>
-                    <Field label="Name (KA — Georgian)">
+                    <Field label={t.aNameKa}>
                       <Input
                         value={form.name_ka ?? ''}
                         onChange={v => set('name_ka', v)}
@@ -164,7 +166,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                     </Field>
                   </div>
 
-                  <Field label="Description (EN)">
+                  <Field label={t.aDescEn}>
                     <Textarea
                       value={form.description ?? ''}
                       onChange={v => set('description', v)}
@@ -173,7 +175,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                     />
                   </Field>
 
-                  <Field label="Description (KA — Georgian)">
+                  <Field label={t.aDescKa}>
                     <Textarea
                       value={form.description_ka ?? ''}
                       onChange={v => set('description_ka', v)}
@@ -184,22 +186,22 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                 </Section>
 
                 {/* ── Category & Price ── */}
-                <Section title="Category & Price">
+                <Section title={t.aCatPrice}>
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label="Category" required>
+                    <Field label={t.aCategory} required>
                       <select
                         value={form.categorySlug ?? ''}
                         onChange={e => set('categorySlug', e.target.value)}
                         className="w-full bg-obsidian-100 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-gold/50"
                       >
-                        <option value="">Select...</option>
+                        <option value="">{t.aSelectCat}</option>
                         {categories.sort((a,b) => a.sort_order - b.sort_order).map(c => (
                           <option key={c.slug} value={c.slug}>{c.icon} {c.name}</option>
                         ))}
                       </select>
                     </Field>
 
-                    <Field label="Sort Order">
+                    <Field label={t.aSortOrder}>
                       <Input
                         type="number"
                         value={String(form.sort_order ?? 0)}
@@ -210,7 +212,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label="Price" required>
+                    <Field label={t.aPrice} required>
                       <Input
                         type="number"
                         value={String(form.price ?? 0)}
@@ -224,8 +226,8 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                 </Section>
 
                 {/* ── Image ── */}
-                <Section title="Image">
-                  <Field label="Image URL">
+                <Section title={t.aImage}>
+                  <Field label={t.aImageUrl}>
                     <Input
                       value={form.image_url ?? ''}
                       onChange={v => set('image_url', v)}
@@ -247,7 +249,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                 </Section>
 
                 {/* ── Dietary & Allergens ── */}
-                <Section title="Dietary Tags">
+                <Section title={t.aDietaryTags}>
                   <div className="flex flex-wrap gap-2">
                     {DIETARY.map(tag => {
                       const active = (form.dietary_tags ?? []).includes(tag)
@@ -270,7 +272,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                   </div>
                 </Section>
 
-                <Section title="Allergens">
+                <Section title={t.aAllergens}>
                   <div className="flex flex-wrap gap-2">
                     {ALLERGENS.map(tag => {
                       const active = (form.allergens ?? []).includes(tag)
@@ -294,7 +296,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                 </Section>
 
                 {/* ── Smart Pairings ── */}
-                <Section title="Smart Pairings">
+                <Section title={t.aPairings}>
                   <div className="space-y-2">
                     <AnimatePresence initial={false}>
                       {(form.paired_items ?? []).map((p, i) => (
@@ -343,21 +345,21 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                       className="flex items-center gap-2 text-xs text-white/40 hover:text-gold border border-dashed border-white/10 hover:border-gold/30 w-full py-2 rounded-xl justify-center transition-all"
                     >
                       <Plus size={12} />
-                      Add Pairing
+                      {t.aAddPairing}
                     </button>
                   </div>
                 </Section>
 
                 {/* ── Flags ── */}
-                <Section title="Options">
+                <Section title={t.aOptions}>
                   <div className="flex gap-4">
                     <Toggle
-                      label="Featured"
+                      label={t.aFeatured}
                       value={form.is_featured ?? false}
                       onChange={v => set('is_featured', v)}
                     />
                     <Toggle
-                      label="Available"
+                      label={t.aAvailable}
                       value={form.is_available ?? true}
                       onChange={v => set('is_available', v)}
                     />
@@ -377,7 +379,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                     onClick={onClose}
                     className="px-4 py-2 rounded-xl text-sm text-white/40 hover:text-white border border-white/10 hover:border-white/20 transition-colors"
                   >
-                    Cancel
+                    {t.aCancel}
                   </button>
                   <button
                     type="submit"
@@ -385,7 +387,7 @@ export default function ItemFormModal({ open, item, categories, restaurantSlug, 
                     className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold bg-gold text-black hover:shadow-gold-glow transition-shadow disabled:opacity-60"
                   >
                     {saving && <Loader2 size={14} className="animate-spin" />}
-                    {isNew ? 'Add Item' : 'Save Changes'}
+                    {isNew ? t.aAddMenuItem : t.aSave}
                   </button>
                 </div>
               </div>
