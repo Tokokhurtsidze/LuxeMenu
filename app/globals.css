@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ── Dark mode (default) ─────────────────────────────────────── */
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #F5D077;
+    --gold-glow: rgba(212, 175, 55, 0.25);
+
+    /* Page-level CSS vars — components use these */
+    --pg-bg:          #000000;
+    --pg-fg:          #FAFAFA;
+    --pg-fg-muted:    rgba(255, 255, 255, 0.45);
+    --pg-surface:     rgba(255, 255, 255, 0.04);
+    --pg-border:      rgba(255, 255, 255, 0.08);
+    --pg-border-lg:   rgba(255, 255, 255, 0.12);
+    --pg-input-bg:    rgba(255, 255, 255, 0.06);
+    --pg-shimmer-a:   rgba(255, 255, 255, 0.04);
+    --pg-shimmer-b:   rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Light mode ─────────────────────────────────────────────── */
+  html.light {
+    --gold: #9A7D1E;          /* darker gold for contrast on white */
+    --gold-light: #C4A020;
+    --gold-glow: rgba(154, 125, 30, 0.2);
+
+    --pg-bg:          #F5F3EE;
+    --pg-fg:          #111110;
+    --pg-fg-muted:    rgba(0, 0, 0, 0.45);
+    --pg-surface:     rgba(0, 0, 0, 0.04);
+    --pg-border:      rgba(0, 0, 0, 0.09);
+    --pg-border-lg:   rgba(0, 0, 0, 0.14);
+    --pg-input-bg:    rgba(0, 0, 0, 0.05);
+    --pg-shimmer-a:   rgba(0, 0, 0, 0.04);
+    --pg-shimmer-b:   rgba(0, 0, 0, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--pg-bg);
+    color: var(--pg-fg);
+    min-height: 100dvh;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* ── Scrollbars ─────────────────────────────────────────────── */
+  .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .scrollbar-gold::-webkit-scrollbar { width: 3px; }
+  .scrollbar-gold::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-gold::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 2px; }
+}
+
+@layer components {
+  /* ── Glass effects — auto-adapt to theme ─────────────────────── */
+  .glass {
+    background:          var(--pg-surface);
+    backdrop-filter:     blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid   var(--pg-border);
+  }
+
+  .glass-strong {
+    background:          rgba(255,255,255,0.07);
+    backdrop-filter:     blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid   var(--pg-border-lg);
+  }
+  html.light .glass-strong {
+    background: rgba(0,0,0,0.06);
+  }
+
+  .glass-dark {
+    background:          rgba(0, 0, 0, 0.60);
+    backdrop-filter:     blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid   rgba(255,255,255,0.06);
+  }
+  html.light .glass-dark {
+    background:  rgba(245,243,238,0.92);
+    border-color: var(--pg-border);
+  }
+
+  .gold-border        { border: 1px solid rgba(212,175,55,0.3); }
+  .gold-border-strong { border: 1px solid rgba(212,175,55,0.6); }
+
+  html.light .gold-border        { border-color: rgba(154,125,30,0.35); }
+  html.light .gold-border-strong { border-color: rgba(154,125,30,0.60); }
+
+  .text-gold    { color: var(--gold); }
+  .bg-gold-subtle { background: rgba(212,175,55,0.08); }
+
+  /* ── Skeleton shimmer ────────────────────────────────────────── */
+  .shimmer-skeleton {
+    background: linear-gradient(90deg,
+      var(--pg-shimmer-a) 0%,
+      var(--pg-shimmer-b) 50%,
+      var(--pg-shimmer-a) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+  }
+
+  /* ── Inputs — adapt to theme ─────────────────────────────────── */
+  html.light input,
+  html.light textarea,
+  html.light select {
+    color: var(--pg-fg) !important;
+    background-color: var(--pg-input-bg) !important;
+    border-color: var(--pg-border) !important;
+  }
+  html.light input::placeholder,
+  html.light textarea::placeholder { color: rgba(0,0,0,0.28) !important; }
+
+  /* ── Admin panel text overrides for light mode ───────────────── */
+  html.light .text-white  { color: var(--pg-fg) !important; }
+  html.light .text-white\/80 { color: rgba(0,0,0,0.80) !important; }
+  html.light .text-white\/70 { color: rgba(0,0,0,0.75) !important; }
+  html.light .text-white\/60 { color: rgba(0,0,0,0.60) !important; }
+  html.light .text-white\/50 { color: rgba(0,0,0,0.50) !important; }
+  html.light .text-white\/40 { color: rgba(0,0,0,0.40) !important; }
+  html.light .text-white\/30 { color: rgba(0,0,0,0.30) !important; }
+  html.light .text-white\/20 { color: rgba(0,0,0,0.35) !important; }
+  html.light .text-white\/25 { color: rgba(0,0,0,0.45) !important; }
+  html.light .text-white\/10 { color: rgba(0,0,0,0.10) !important; }
+
+  html.light .border-white\/8  { border-color: rgba(0,0,0,0.08) !important; }
+  html.light .border-white\/5  { border-color: rgba(0,0,0,0.05) !important; }
+  html.light .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
+
+  html.light .bg-obsidian-50  { background-color: var(--pg-bg) !important; }
+  html.light .bg-obsidian-100 { background-color: rgba(0,0,0,0.05) !important; }
+  html.light .bg-obsidian-200 { background-color: rgba(0,0,0,0.07) !important; }
+  html.light .bg-obsidian-DEFAULT { background-color: #F5F3EE !important; }
+  html.light .bg-black  { background-color: var(--pg-bg) !important; }
+
+  html.light .shadow-glass {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+}
+
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
