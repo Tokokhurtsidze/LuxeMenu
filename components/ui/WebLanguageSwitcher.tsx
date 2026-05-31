@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { useWebLocale } from '@/contexts/WebLocaleContext'
 import ThemeToggle from './ThemeToggle'
 
@@ -8,26 +9,27 @@ export default function WebLanguageSwitcher({ className = '' }: { className?: st
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      {/* Theme toggle */}
       <ThemeToggle />
 
-      {/* Language toggle */}
-      <div className="flex items-center gap-1 glass rounded-full px-1 py-1 border"
-        style={{ borderColor: 'var(--pg-border)' }}>
-        {(['en', 'ka'] as const).map(lang => (
-          <button
-            key={lang}
-            onClick={() => setLocale(lang)}
-            className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest transition-all"
-            style={locale === lang
-              ? { backgroundColor: 'var(--gold)', color: 'var(--pg-bg)' }
-              : { color: 'var(--pg-fg-muted)' }
-            }
-          >
-            {lang === 'en' ? 'EN' : 'ქარ'}
-          </button>
-        ))}
-      </div>
+      <motion.button
+        whileTap={{ scale: 0.93 }}
+        onClick={() => setLocale(locale === 'en' ? 'ka' : 'en')}
+        className="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-bold tracking-widest uppercase transition-all"
+        style={{
+          borderColor: 'rgba(212,175,55,0.4)',
+          color: 'var(--gold)',
+          background: 'rgba(212,175,55,0.08)',
+        }}
+      >
+        <motion.span
+          key={locale}
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.15 }}
+        >
+          {locale === 'en' ? 'ქარ' : 'EN'}
+        </motion.span>
+      </motion.button>
     </div>
   )
 }

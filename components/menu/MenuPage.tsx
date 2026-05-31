@@ -100,21 +100,13 @@ export default function MenuPage({ restaurant, categories, items }: MenuPageProp
             {/* Language + Theme */}
             <div className="absolute top-4 right-4 flex items-center gap-2">
               <ThemeToggle />
-              <div className="flex items-center gap-1 glass rounded-full px-1 py-1 border border-white/8">
-                {(['en', 'ka'] as Locale[]).map(lang => (
-                  <button
-                    key={lang}
-                    onClick={() => setLocale(lang)}
-                    className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest transition-all"
-                    style={locale === lang
-                      ? { backgroundColor: 'var(--accent)', color: 'var(--accent-fg)' }
-                      : { color: 'rgba(128,128,128,0.7)' }
-                    }
-                  >
-                    {lang === 'en' ? t.langEn : t.langKa}
-                  </button>
-                ))}
-              </div>
+              <button
+                onClick={() => setLocale(locale === 'en' ? 'ka' : 'en')}
+                className="glass rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest transition-all border border-white/8"
+                style={{ backgroundColor: 'var(--accent)', color: 'var(--accent-fg)' }}
+              >
+                {locale === 'en' ? t.langKa : t.langEn}
+              </button>
             </div>
 
             {restaurant.logo_url?.startsWith('http') && (
