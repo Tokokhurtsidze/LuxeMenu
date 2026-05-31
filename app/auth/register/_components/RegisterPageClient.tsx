@@ -13,10 +13,11 @@ const inputCls = 'w-full bg-obsidian-100 border border-white/10 text-white text-
 
 export default function RegisterPageClient() {
   const router = useRouter()
-  const { t } = useWebLocale()
+  const { t, locale } = useWebLocale()
 
   const [name,     setName]     = useState('')
   const [email,    setEmail]    = useState('')
+  const [phone,    setPhone]    = useState('')
   const [password, setPassword] = useState('')
   const [showPw,   setShowPw]   = useState(false)
   const [loading,  setLoading]  = useState(false)
@@ -31,7 +32,7 @@ export default function RegisterPageClient() {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, phone, password }),
     })
 
     const data = await res.json()
@@ -76,6 +77,14 @@ export default function RegisterPageClient() {
             <label className="block text-xs text-white/40 mb-1.5">{t.emailLabel}</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email"
               placeholder="you@restaurant.com" className={inputCls} />
+          </div>
+
+          <div>
+            <label className="block text-xs text-white/40 mb-1.5">
+              {locale === 'ka' ? 'ტელეფონი' : 'Phone Number'} <span className="text-white/20 text-[10px]">(optional)</span>
+            </label>
+            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+              placeholder="+995 5XX XXX XXX" className={inputCls} />
           </div>
 
           <div>

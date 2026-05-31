@@ -5,7 +5,7 @@ import { UserModel } from '@/lib/models'
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, password } = await req.json()
+    const { name, email, password, phone } = await req.json()
 
     if (!name?.trim() || !email?.trim() || !password) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
@@ -24,8 +24,9 @@ export async function POST(req: NextRequest) {
     const passwordHash = await bcrypt.hash(password, 12)
 
     const user = await UserModel.create({
-      name: name.trim(),
+      name:  name.trim(),
       email: email.toLowerCase().trim(),
+      phone: phone?.trim() ?? '',
       passwordHash,
       role: 'owner',
     })

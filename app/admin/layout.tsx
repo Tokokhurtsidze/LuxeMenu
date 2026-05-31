@@ -1,7 +1,6 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
-import SignOutButton from './_components/SignOutButton'
-import WebLanguageSwitcher from '@/components/ui/WebLanguageSwitcher'
+import AdminNav from './_components/AdminNav'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -20,11 +19,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <WebLanguageSwitcher />
-          <span className="text-xs text-white/30 hidden lg:block truncate max-w-[160px]">{session.user.email}</span>
-          <SignOutButton />
-        </div>
+
+        <AdminNav email={session.user.email} role={session.user.role} />
       </nav>
       <div className="p-6 sm:p-10">{children}</div>
     </div>
