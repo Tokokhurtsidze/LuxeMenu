@@ -46,7 +46,7 @@ interface Props {
 }
 
 export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }: Props) {
-  const { t } = useWebLocale()
+  const { t, locale } = useWebLocale()
   const [name,    setName]    = useState('')
   const [nameKa,  setNameKa]  = useState('')
   const [adding,  setAdding]  = useState(false)
@@ -169,7 +169,7 @@ export default function CategoriesPanel({ restaurantSlug, categories, onUpdate }
                       : 'border-white/10 text-white/50 hover:border-gold/30 hover:text-white/80 hover:bg-gold/5'
                   )}
                 >
-                  {p.en}
+                  {locale === 'ka' ? p.ka : p.en}
                 </motion.button>
               ))}
             </div>
