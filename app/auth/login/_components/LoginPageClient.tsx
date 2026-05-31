@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { useWebLocale } from '@/contexts/WebLocaleContext'
 import WebLanguageSwitcher from '@/components/ui/WebLanguageSwitcher'
+import ChangePasswordForm from './ChangePasswordForm'
 
 const inputCls = 'w-full bg-obsidian-100 border border-white/10 text-white text-sm rounded-lg px-3 py-2.5 placeholder:text-white/20 focus:outline-none focus:border-gold/50 transition-colors'
 
@@ -15,13 +16,14 @@ export default function LoginPageClient() {
   const router       = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl  = searchParams.get('callbackUrl') ?? '/admin'
-  const { t } = useWebLocale()
+  const { t, locale } = useWebLocale()
 
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
   const [showPw,   setShowPw]   = useState(false)
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState<string | null>(null)
+  const [changePw, setChangePw] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -92,7 +94,18 @@ export default function LoginPageClient() {
             {t.createOne}
           </Link>
         </p>
+
+        <p className="text-center text-xs text-white/20 mt-3">
+          <button
+            onClick={() => setChangePw(true)}
+            className="hover:text-white/50 transition-colors underline underline-offset-2"
+          >
+            {locale === 'ka' ? 'პაროლის შეცვლა?' : 'Change password?'}
+          </button>
+        </p>
       </div>
+
+      <ChangePasswordForm open={changePw} onClose={() => setChangePw(false)} />
     </main>
   )
 }
