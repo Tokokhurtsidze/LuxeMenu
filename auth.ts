@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import dbConnect from '@/lib/mongodb'
 import { UserModel } from '@/lib/models'
+import type { IUser } from '@/lib/models/User'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
@@ -26,7 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!email || !password) return null
 
         await dbConnect()
-        const user = await UserModel.findOne({ email: email.toLowerCase() }).lean()
+        const user = await UserModel.findOne({ email: email.toLowerCase() }).lean<IUser>()
         if (!user) return null
 
         const valid = await bcrypt.compare(password, user.passwordHash)
