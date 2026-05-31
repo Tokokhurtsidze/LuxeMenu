@@ -95,14 +95,18 @@ export default function LoginPageClient() {
           </Link>
         </p>
 
-        <p className="text-center text-xs text-white/20 mt-3">
-          <button
-            onClick={() => setChangePw(true)}
-            className="hover:text-white/50 transition-colors underline underline-offset-2"
-          >
+        <div className="flex items-center justify-center gap-3 mt-3">
+          <button onClick={() => setChangePw(true)}
+            className="text-xs text-white/20 hover:text-white/50 transition-colors underline underline-offset-2">
             {locale === 'ka' ? 'პაროლის შეცვლა?' : 'Change password?'}
           </button>
-        </p>
+          <span className="text-white/10">·</span>
+          <span className="text-xs text-white/20">
+            {locale === 'ka'
+              ? 'დაგავიწყდა? მიმართეთ ადმინს.'
+              : 'Forgot? Contact your admin.'}
+          </span>
+        </div>
       </div>
 
       <ChangePasswordForm open={changePw} onClose={() => setChangePw(false)} />
